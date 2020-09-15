@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 
 import { logout } from './../../ducks/reducer'
 
-import homeLogo from './../../assets/home_logo.png'
-import newLogo from './../../assets/new_logo.png'
-import logoutLogo from './../../assets/shut_down.png'
+import homeLogo from './home_logo.png'
+import newLogo from './new_logo.png'
+import logoutLogo from './shut_down.png'
 import './Nav.css'
 
 function Nav(props) {

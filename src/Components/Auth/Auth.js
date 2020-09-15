@@ -4,18 +4,18 @@ import axios from 'axios'
 
 import { updateUser } from './../../ducks/reducer'
 
-import logo from './../../assets/helo_logo.png'
+import logo from './helo_logo.png'
 import './Auth.css'
 
 class Auth extends Component {
     constructor(props) {
-        super()
+        super(props)
         this.state = {
             username: '',
             password: ''
         }
-        this.login = this.login.bind(this)
-        this.register = this.register.bind(this)
+        this.login = this.login
+        this.register = this.register
     }
     handleChange(prop, val) {
         if (val.length < 12) {
@@ -42,8 +42,8 @@ class Auth extends Component {
                         <input value={this.state.username} onChange={e => this.handleChange('username', e.target.value)} />
                     </div>
                     <div className='auth_button_container'>
-                        <button className='dark_button' onClick={this.login}>Login</button>
-                        <button className='dark_button' onClick={this.register}>Register</button>
+                        <button className='black_button' onClick={this.login}>Login</button>
+                        <button className='black_button' onClick={this.register}>Register</button>
                     </div>
                 </div>
             </div>

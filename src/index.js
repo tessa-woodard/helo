@@ -5,7 +5,6 @@ import { HashRouter as Router } from 'react-router-dom';
 
 import store from './ducks/store';
 import App from './App';
-import { unregister } from './registerServiceWorker';
 
 import './reset.css';
 import axios from 'axios';
@@ -23,4 +22,3 @@ ReactDOM.render(
       <App />
     </Router>
   </Provider>, document.getElementById('root'));
-unregister();
