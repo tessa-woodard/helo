@@ -2,34 +2,33 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { updateUser } from './../../ducks/reducer'
+import { loginUser } from '../../ducks/reducer'
 
 import logo from './helo_logo.png'
 import './Auth.css'
 
 class Auth extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             username: '',
             password: ''
         }
-        this.login = this.login.bind(this)
-        this.register = this.register.bind(this)
     }
-    handleChange(prop, val) {
-        if (val.length < 12) {
-            this.setState({
-                [prop]: val
-            })
-        }
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value,
+
+        })
     }
+
+
     login = (e) => {
         const { username, password } = this.state
         axios
-            .post('/auth/login', { username, password })
+            .post('/api/auth/login', { username, password })
             .then(res => {
-                this.props.updateUser(res.data)
+                this.props.loginUser(res.data)
                 this.props.history.push('/dashboard')
             })
             .catch((err) => {
@@ -39,9 +38,9 @@ class Auth extends Component {
     register = () => {
         const { username, password } = this.state
         axios
-            .post('/auth/register', { username, password })
+            .post('/api/auth/register', { username, password })
             .then(res => {
-                this.props.updateUser(res.data)
+                this.props.loginUser(res.data)
                 this.props.history.push('/dashboard')
             })
             .catch((err) => {
@@ -56,15 +55,15 @@ class Auth extends Component {
                     <h1 className='auth_title'>Helo</h1>
                     <div className='auth_input_box'>
                         <p>Username:</p>
-                        <input value={this.state.username} onChange={e => this.handleChange('username', e.target.value)} />
+                        <input name='username' onChange={(e) => { this.handleChange(e) }} />
                     </div>
                     <div className='auth_input_box'>
                         <p>Password:</p>
-                        <input value={this.state.password} type='password' onChange={e => this.handleChange('password', e.target.value)} />
+                        <input name='password' onChange={(e) => { this.handleChange(e) }} type='password' />
                     </div>
                     <div className='auth_button_container'>
-                        <button className='black_button' onClick={(e) => { this.login() }}> Login </button>
-                        <button className='black_button' onClick={(e) => { this.register() }}> Register </button>
+                        <button className='black_button' onClick={() => { this.login() }}> Login </button>
+                        <button className='black_button' onClick={() => { this.register() }}> Register </button>
                     </div>
                 </div>
             </div>
@@ -72,4 +71,4 @@ class Auth extends Component {
     }
 }
 
-export default connect(null, { updateUser })(Auth)
+export default connect(null, { loginUser })(Auth)

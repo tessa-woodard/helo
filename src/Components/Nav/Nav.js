@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { logout } from './../../ducks/reducer'
+import { logoutUser } from './../../ducks/reducer'
 
 import homeLogo from './home_logo.png'
 import newLogo from './new_logo.png'
@@ -32,4 +32,4 @@ function Nav(props) {
 function mapStateToProps(state) {
     return state
 }
-export default withRouter(connect(mapStateToProps, { logout })(Nav))
+export default withRouter(connect(mapStateToProps, { logoutUser })(Nav))

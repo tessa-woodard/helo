@@ -5,40 +5,43 @@ module.exports = {
         const { username, password } = req.body
         const db = req.app.get('db')
 
-        let authorizedUser = await db.check_username(username)
-        authorizedUser = authorizedUser[0]
-        if (authorizedUser) {
-            res.status(409).send('Email already exists')
-        }
+        const [user] = await db.check_username([username])
+        if (user) return res.status(409).send('User exists')
 
-        const salt = bcrypt.genSaltSync(10);
+        const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(password, salt)
 
-        let newUser = await db.register({ username, password: hash })
-        newUser = newUser[0]
-        res.status(200).send(newUser)
+        const [newUser] = await db.register([username, hash])
+        req.session.user = newUser
+        res.status(200).send(req.session.user)
+    },
+
+    getUser: (req, res) => {
+        if (req.session.user) {
+            res.status(200).send(req.session.user)
+        } else {
+            res.status(404).send('No session found')
+        }
     },
 
     login: async (req, res) => {
         const { username, password } = req.body
         const db = req.app.get('db')
-        let authorizedUser = await db.get_user({ username })
-        authorizedUser = authorizedUser[0]
-
-        if (!authorizedUser) {
-            res.status(400).send('Email does not exist')
-        }
-        const authenticated = bcrypt.compareSync(password, authorizedUser.password)
-
-        if (authenticated) {
-            delete authorizedUser.password;
-            req.session.user = authorizedUser;
-            res.status(202).send(req.session.user)
-        } else {
-            res.status(401).send('Password is incorrect')
+        const [existingUser] = await db.check_username([username])
+        if (!existingUser) {
+            return res.status(409).send('User does not exist')
         }
 
-        res.status(200).send(authorizedUser)
+        const isAuthenticated = bcrypt.compareSync(password, existingUser.password);
+        if (!isAuthenticated) {
+            return res.status(403).send('Incorrect username or password')
+        }
+
+        delete existingUser.password
+        req.session.user = existingUser
+
+        res.status(200).send(req.session.user)
+
     },
 
     logout: (req, res) => {

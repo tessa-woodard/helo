@@ -11,8 +11,6 @@ const ctrl = require('./controller')
 const app = express()
 app.use(express.json())
 
-const port = SERVER_PORT
-
 app.use(session({
     resave: false,
     saveUninitialized: true,
