@@ -42,32 +42,29 @@ module.exports = {
     },
 
     logout: (req, res) => {
-        console.log('hit logout')
-        console.log(req.session)
-        req.session.destroy();
-        console.log(req.session)
+        req.session.destroy()
         res.sendStatus(200)
     },
 
-    getPosts: async (req, res) => {
-        const { userid } = req.params
+    grabPosts: async (req, res) => {
+        const { userId } = req.params
         const db = req.app.get('db')
 
-        let posts = await db.get_posts()
+        let posts = await db.grab_posts()
 
-        if (req.query.userposts === true && req.query.search) {
+        if (req.query.posts === true && req.query.search) {
             posts = posts.filter(e => e.title === req.query.search)
             return posts
         }
-        if (req.query.userposts === false && !req.query.search) {
-            posts = posts.filter(e => e.author_id !== userid)
+        if (req.query.user === false && !req.query.search) {
+            posts = posts.filter(e => e.author_id !== userId)
             return posts
         }
-        if (req.query.userposts === false && req.query.search) {
-            posts = posts.filter(e => e.title === req.query.search && e.author_id !== userid)
+        if (req.query.posts === false && req.query.search) {
+            posts = posts.filter(e => e.title === req.query.search && e.author_id !== userId)
             return posts
         }
-        if (req.query.userposts === true && !req.query.search) {
+        if (req.query.posts === true && !req.query.search) {
             return posts
         }
         res.status(200).send(posts)

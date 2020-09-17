@@ -5,4 +5,4 @@ INSERT INTO users (
     ${username},
     ${password}
 )
-RETURNING * ;
+RETURNING *;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { HashRouter as Router } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 import store from './ducks/store';
 import App from './App';
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
+    <HashRouter>
       <App />
-    </Router>
+    </HashRouter>
   </Provider>, document.getElementById('root'));
