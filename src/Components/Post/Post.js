@@ -1,27 +1,32 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 import noImage from './no_image.jpg'
 import './Post.css'
 
 class Post extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             author: '',
             author_pic: '',
             title: '',
             img: '',
             content: '',
-            loading: true
         }
     }
+
     componentDidMount() {
         axios.get(`/api/post/${this.props.match.params.id}`)
             .then(res => {
-                setTimeout(_ => this.setState({ ...res.data, loading: false }), 500)
+                console.log(res.data)
+                this.setState(
+                    res.data[0]
+                )
             })
     }
+
     render() {
         let imgSrc = this.state.img ? this.state.img : noImage;
         return (
@@ -33,7 +38,7 @@ class Post extends Component {
                             <h2 className='title'>{this.state.title}</h2>
                             <div className='author_box'>
                                 <p>by {this.state.author}</p>
-                                <img src={this.state.author_pic} alt='author' />
+                                <img src={this.state.profile_pic} alt='author' />
                             </div>
                         </div>
                         <div className='post_content_box'>
@@ -59,4 +64,6 @@ class Post extends Component {
     }
 }
 
-export default Post
+const mapStateToProps = reduxState => reduxState
+
+export default connect(mapStateToProps)(Post)

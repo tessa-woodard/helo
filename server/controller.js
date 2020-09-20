@@ -8,10 +8,12 @@ module.exports = {
         const [user] = await db.check_username([username])
         if (user) return res.status(409).send('User exists')
 
+        const profile_pic = `https://robohash.org/${username}.png`
+
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(password, salt)
 
-        const [newUser] = await db.register([username, hash])
+        const [newUser] = await db.register([username, hash, profile_pic])
         req.session.user = newUser
         res.status(200).send(req.session.user)
     },
@@ -32,7 +34,7 @@ module.exports = {
             return res.status(409).send('User does not exist')
         }
 
-        const isAuthenticated = bcrypt.compareSync(password, existingUser.password);
+        const isAuthenticated = bcrypt.compareSync(password, existingUser.password)
         if (!isAuthenticated) {
             return res.status(403).send('Incorrect username or password')
         }
@@ -49,11 +51,11 @@ module.exports = {
         res.sendStatus(200)
     },
 
-    grabPosts: async (req, res) => {
+    getPosts: async (req, res) => {
         const { userId } = req.params
         const db = req.app.get('db')
 
-        let posts = await db.grab_posts()
+        let posts = await db.get_posts()
 
         if (req.query.posts === true && req.query.search) {
             posts = posts.filter(e => e.title === req.query.search)

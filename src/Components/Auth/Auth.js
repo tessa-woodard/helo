@@ -22,7 +22,6 @@ class Auth extends Component {
         })
     }
 
-
     login = (e) => {
         const { username, password } = this.state
         axios

@@ -4,7 +4,7 @@ DROP TABLE if exists users;
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     username VARCHAR(20),
-    password VARCHAR(20),
+    hash,
     profile_pic TEXT
 );
 

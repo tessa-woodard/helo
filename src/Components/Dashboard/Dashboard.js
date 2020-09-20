@@ -13,29 +13,22 @@ class Dashboard extends Component {
             search: '',
             myPosts: true,
             posts: [],
-            loading: true
         }
-        this.grabPosts = this.grabPosts.bind(this)
-        this.reset = this.reset.bind(this)
     }
-    componentDidMount() {
-        this.grabPosts()
+
+    setSearchState(e) {
+        this.setState({
+            search: e.target.value
+        })
     }
-    grabPosts() {
-        let { search, myPosts } = this.state
-        let url = `/api/posts/${this.props.userId}`
-        if (myPosts && !search) {
-            url += '?mine=true'
-        } else if (!myPosts && search) {
-            url += `?search=${search}`
-        } else if (myPosts && search) {
-            url += `?mine=true&search=${search}`
-        }
-        axios.get(url)
-            .then(res => {
-                setTimeout(_ => this.setState({ posts: res.data, loading: false }), 500)
-            })
+
+    setUserPostsState() {
+        const { userPosts } = this.state
+        this.setState({
+            userPosts: !userPosts
+        })
     }
+
     reset() {
         let { myPosts } = this.state
         let url = `/api/posts/${this.props.userId}`
@@ -49,7 +42,7 @@ class Dashboard extends Component {
     }
     render() {
         let posts = this.state.posts.map((el) => {
-            return <Link to={`/post/${el.post_id}`} key={el.post_id}>
+            return <Link to={`/api/posts/${el.id}`} key={el.post_id}>
                 <div className='content_box dash_post_box'>
                     <h3>{el.title}</h3>
                     <div className='author_box'>
@@ -69,7 +62,7 @@ class Dashboard extends Component {
                     </div>
                     <div className='dash_check_box'>
                         <p>My Posts</p>
-                        <input checked={this.state.myPosts} onChange={_ => this.setState({ myPosts: !this.state.myPosts }, this.grabPosts)} type='checkbox' />
+                        <input checked={this.state.myPosts} onChange={_ => this.setState({ myPosts: !this.state.myPosts }, this.getPosts)} type='checkbox' />
                     </div>
                 </div>
                 <div className='content_box dash_posts_container'>

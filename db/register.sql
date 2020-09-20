@@ -1,3 +1,4 @@
-INSERT INTO users (username, password) 
-VALUES ($1, $2)
-returning id, username;
+INSERT INTO users 
+(username, hash, profile_pic)
+VALUES ($1, $2, $3)
+returning id, username, profile_pic;

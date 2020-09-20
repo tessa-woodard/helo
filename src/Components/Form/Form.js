@@ -12,17 +12,15 @@ class Form extends Component {
             title: '',
             img: '',
             content: ''
-        };
-        this.submit = this.submit.bind(this);
-    }
-    submit() {
-        if (this.props.userId) {
-            axios.post(`/api/post/${this.props.userId}`, this.state)
-                .then(res => this.props.history.push('/dashboard'))
-        } else {
-            alert('You must log in to create posts')
         }
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
+
+    handleSubmit() {
+        axios.post(`/api/posts/`, this.state)
+            .then(res => this.props.history.push('/dashboard'))
+    }
+
     render() {
         let imgSrc = this.state.img ? this.state.img : noImage;
         return (
@@ -41,7 +39,7 @@ class Form extends Component {
                     <p>Content:</p>
                     <textarea value={this.state.content} onChange={e => this.setState({ content: e.target.value })} />
                 </div>
-                <button onClick={this.submit} className='black_button form_button'>Post</button>
+                <button onClick={this.handleSubmit} className='black_button form_button'>Post</button>
             </div>
         )
     }

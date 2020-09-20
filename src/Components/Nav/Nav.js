@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { logoutUser } from './../../ducks/reducer'
+import { logoutUser } from '../../ducks/reducer'
 
 import homeLogo from './home_logo.png'
 import newLogo from './new_logo.png'
