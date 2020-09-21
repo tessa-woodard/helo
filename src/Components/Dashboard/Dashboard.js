@@ -14,6 +14,7 @@ class Dashboard extends Component {
             search: "",
             myPosts: true,
         }
+        this.reset = this.reset.bind(this)
     }
 
     componentDidMount() {
@@ -47,13 +48,12 @@ class Dashboard extends Component {
     }
 
     reset() {
-        let { myPosts } = this.state
+        // let { myPosts } = this.state
         let url = "/api/posts/"
-        if (myPosts) {
+        if (this.state.myPosts) {
             url += "?user_posts=true&search="
         }
         axios.get(url).then((res) => {
-            console.log(this.state);
             this.setState({ posts: res.data, search: "" })
         })
     }
@@ -71,7 +71,6 @@ class Dashboard extends Component {
             </Link>
             )
         })
-
         return (
             <div className='Dash'>
                 <div className='content_box dash_filter'>
