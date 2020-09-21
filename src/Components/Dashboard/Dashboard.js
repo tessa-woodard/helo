@@ -13,7 +13,7 @@ class Dashboard extends Component {
             posts: [],
             search: "",
             myPosts: true,
-        };
+        }
     }
 
     componentDidMount() {
@@ -22,78 +22,70 @@ class Dashboard extends Component {
 
     getPosts = () => {
         let { search, myPosts } = this.state;
-        let url = "/api/posts/";
+        let url = "/api/posts/"
 
         if (myPosts && !search) {
-            url += "?user_posts=true&search=";
+            url += "?user_posts=true&search="
         } else if (!myPosts && search) {
-            url += `?user_posts=false&search=${search}`;
+            url += `?user_posts=false&search=${search}`
         } else if (myPosts && search) {
-            url += `?user_posts=true&search=${search}`;
+            url += `?user_posts=true&search=${search}`
         } else if (!myPosts && !search) {
-            url += "?user_posts=false&search=";
+            url += "?user_posts=false&search="
         }
         axios.get(url).then((res) => {
             this.setState({
                 posts: res.data,
-            });
-        });
-    };
+            })
+        })
+    }
 
     handleChange = (e) => {
         this.setState({
             search: e.target.value,
-        });
-    };
+        })
+    }
 
-    reset = () => {
-        let { myPosts } = this.state;
-        let url = "/api/posts/";
+    reset() {
+        let { myPosts } = this.state
+        let url = "/api/posts/"
         if (myPosts) {
-            url += "?user_posts=true&search=";
+            url += "?user_posts=true&search="
         }
         axios.get(url).then((res) => {
             console.log(this.state);
-            this.setState({ posts: res.data, search: "" });
-        });
-    };
+            this.setState({ posts: res.data, search: "" })
+        })
+    }
 
     render() {
-        let posts = this.state.posts.map((el) => {
-            return <Link to={`/api/posts/${el.id}`} key={el.post_id}>
+        const mapPosts = this.state.posts.map((e) => {
+            return (<Link to={`/api/posts/${e.id}`} key={e.id}>
                 <div className='content_box dash_post_box'>
-                    <h3>{el.title}</h3>
+                    <h3>{e.title}</h3>
                     <div className='author_box'>
-                        <p>by {el.author_username}</p>
-                        <img src={el.profile_pic} alt='author' />
+                        <p>by {e.username}</p>
+                        <img src={e.profile_pic} alt='author' />
                     </div>
                 </div>
             </Link>
+            )
         })
+
         return (
             <div className='Dash'>
                 <div className='content_box dash_filter'>
                     <div className='dash_search_box'>
-                        <input value={this.state.search} onChange={e => this.setState({ search: e.target.value })} className='dash_search_bar' placeholder='Search by Title' />
-                        <img onClick={this.grabPosts} className='dash_search_button' src={searchLogo} alt='search' />
+                        <input onChange={(e) => this.handleChange(e)} className='dash_search_bar' placeholder='Search by Title' />
+                        <img onClick={this.getPosts} className='dash_search_button' src={searchLogo} alt='search' />
                         <button onClick={this.reset} className='black_button' id='dash_reset'>Reset</button>
                     </div>
                     <div className='dash_check_box'>
                         <p>My Posts</p>
-                        <input checked={this.state.myPosts} onChange={_ => this.setState({ myPosts: !this.state.myPosts }, this.getPosts)} type='checkbox' />
+                        <input checked={this.state.myPosts} onChange={() => this.setState({ myPosts: !this.state.myPosts }, this.getPosts)} type='checkbox' />
                     </div>
                 </div>
-                <div className='content_box dash_posts_container'>
-                    {!this.state.loading
-                        ?
-                        posts
-                        :
-                        <div className='load_box'>
-                            <div className='load_background'></div>
-                            <div className='load'></div>
-                        </div>
-                    }
-                </div>
+                <section className="post-box">{mapPosts}</section>
             </div>
         )
     }

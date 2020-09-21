@@ -33,7 +33,7 @@ class Post extends Component {
         let imgSrc = this.state.img ? this.state.img : noImage
         return (
             <div className='Post content_box'>
-                {!this.state.loading && this.state.title
+                {this.state.title
                     ?
                     <div>
                         <div className='post_header'>
