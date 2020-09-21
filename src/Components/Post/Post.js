@@ -23,14 +23,14 @@ class Post extends Component {
         })
     }
 
-    delete = () => {
+    delete() {
         axios.delete(`/api/post/${this.props.match.params.postid}`).then((res) => {
             this.props.history.push('/dashboard');
         })
     }
 
     render() {
-        let imgSrc = this.state.img ? this.state.img : noImage;
+        let imgSrc = this.state.img ? this.state.img : noImage
         return (
             <div className='Post content_box'>
                 {!this.state.loading && this.state.title

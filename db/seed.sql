@@ -1,20 +1,20 @@
-DROP TABLE if exists posts;
-DROP TABLE if exists users;
+ROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS users;
 
-CREATE TABLE users(
+create table users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(20),
-    hash,
-    profile_pic TEXT
+    hash VARCHAR(20),
+    profile_pic text
 );
 
-CREATE TABLE posts(
+create table if not exists posts (
     id SERIAL PRIMARY KEY,
     title VARCHAR(45),
     img TEXT,
     content TEXT,
-    author_id INTEGER REFERENCES users(id)
+    author_id INT REFERENCES users(id)
 );
 
 ALTER TABLE users
-ALTER COLUMN password type TEXT;
+ALTER COLUMN hash TYPE TEXT;

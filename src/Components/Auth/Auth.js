@@ -25,7 +25,7 @@ class Auth extends Component {
     login = (e) => {
         const { username, password } = this.state
         axios
-            .post('/api/auth/login', { username, password })
+            .post('/auth/login', { username, password })
             .then(res => {
                 this.props.loginUser(res.data)
                 this.props.history.push('/dashboard')
@@ -37,7 +37,7 @@ class Auth extends Component {
     register = () => {
         const { username, password } = this.state
         axios
-            .post('/api/auth/register', { username, password })
+            .post('/auth/register', { username, password })
             .then(res => {
                 this.props.loginUser(res.data)
                 this.props.history.push('/dashboard')

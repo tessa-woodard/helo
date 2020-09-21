@@ -7,7 +7,6 @@ const session = require('express-session')
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env
 
 const ctrl = require('./controller')
-const postCtrl = require('./postController')
 
 const app = express()
 app.use(express.json())
@@ -21,14 +20,15 @@ app.use(session({
     }
 }))
 
-app.post('/api/auth/register', ctrl.register)
-app.post('/api/auth/login', ctrl.login)
-app.post('/api/auth/logout', ctrl.logout)
+app.post("/auth/register", ctrl.register)
+app.post("/auth/login", ctrl.login)
+app.post("/auth/logout", ctrl.logout)
+app.get("/auth/me", ctrl.me)
 
-app.get('/api/posts/:id', postCtrl.getPosts)
-app.post('/api/posts', postCtrl.addPost)
-app.delete('/api/posts/:post_id', postCtrl.deletePost)
-app.get('/api/post/:id', postCtrl.getPost)
+app.get("/api/posts/", ctrl.getPosts)
+app.get("/api/post/:id", ctrl.getPostById)
+app.post("/api/posts/", ctrl.writePost)
+app.delete("/api/post/:id", ctrl.deletePost)
 
 massive({
     connectionString:

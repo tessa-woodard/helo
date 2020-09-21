@@ -2,19 +2,22 @@ const bcrypt = require('bcrypt')
 
 module.exports = {
     register: async (req, res) => {
+        const db = req.app.get("db")
         const { username, password } = req.body
-        const db = req.app.get('db')
 
-        const [user] = await db.check_username([username])
-        if (user) return res.status(409).send('User exists')
+        const [user] = await db.check_user([username])
 
-        const profile_pic = `https://robohash.org/${username}.png`
+        if (user) {
+            return res.status(409).send("Username taken")
+        }
 
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(password, salt)
 
-        const [newUser] = await db.register([username, hash, profile_pic])
+        const [newUser] = await db.register_user([username, hash])
+
         req.session.user = newUser
+
         res.status(200).send(req.session.user)
     },
 
@@ -27,23 +30,27 @@ module.exports = {
     },
 
     login: async (req, res) => {
+        const db = req.app.get("db")
+
         const { username, password } = req.body
-        const db = req.app.get('db')
-        const [existingUser] = await db.check_username([username])
+
+        const [existingUser] = await db.check_user([username])
+
         if (!existingUser) {
-            return res.status(409).send('User does not exist')
+            return res.status(404).send("User does not exist")
         }
 
-        const isAuthenticated = bcrypt.compareSync(password, existingUser.password)
+        const isAuthenticated = bcrypt.compareSync(password, existingUser.hash)
+
         if (!isAuthenticated) {
-            return res.status(403).send('Incorrect username or password')
+            return res.status(403).send("Incorrect username or password")
         }
 
-        delete existingUser.password
+        delete existingUser.hash
+
         req.session.user = existingUser
 
         res.status(200).send(req.session.user)
-
     },
 
     logout: (req, res) => {
@@ -51,27 +58,67 @@ module.exports = {
         res.sendStatus(200)
     },
 
+    me: async (req, res) => {
+        const db = req.app.get("db");
+        const { user_id } = req.session;
+        const { username, profile_pic } = req.session;
+        const user = await db.me(user_id, username, profile_pic);
+        res.status(200).send(req.session.user);
+    },
+
     getPosts: async (req, res) => {
-        const { userId } = req.params
-        const db = req.app.get('db')
+        const db = req.app.get("db");
 
-        let posts = await db.get_posts()
+        const { id } = req.session.user;
+        const { search, user_posts } = req.query;
 
-        if (req.query.posts === true && req.query.search) {
-            posts = posts.filter(e => e.title === req.query.search)
-            return posts
+        const posts = await db.get_posts();
+
+        if (user_posts === "true" && search) {
+            const lowerSearch = search.toLowerCase();
+            const filteredPosts = posts.filter((post) =>
+                post.title.toLowerCase().includes(lowerSearch)
+            );
+            return res.status(200).send(filteredPosts);
+        } else if (user_posts === "false" && !search) {
+            const filteredPosts = posts.filter((post) => post.author_id != id);
+            return res.status(200).send(filteredPosts);
+        } else if (user_posts === "false" && search) {
+            const lowerSearch = search.toLowerCase();
+            const filteredPosts = posts.filter(
+                (post) =>
+                    post.author_id != id && post.title.toLowerCase().includes(lowerSearch)
+            );
+            return res.status(200).send(filteredPosts);
+        } else {
+            return res.status(200).send(posts);
         }
-        if (req.query.user === false && !req.query.search) {
-            posts = posts.filter(e => e.author_id !== userId)
-            return posts
-        }
-        if (req.query.posts === false && req.query.search) {
-            posts = posts.filter(e => e.title === req.query.search && e.author_id !== userId)
-            return posts
-        }
-        if (req.query.posts === true && !req.query.search) {
-            return posts
-        }
-        res.status(200).send(posts)
-    }
+    },
+
+    getPostById: async (req, res) => {
+        const db = req.app.get("db");
+
+        const { id } = req.params;
+
+        const post = await db.get_post_by_id([id]);
+
+        res.status(200).send(post);
+    },
+
+    writePost: async (req, res) => {
+        const db = req.app.get("db");
+        const { id } = req.session.user;
+        const { title, img, content } = req.body;
+        await db.write_post([id, title, img, content]);
+        const posts = await db.get_posts();
+        res.status(200).send(posts);
+    },
+
+    deletePost: async (req, res) => {
+        const db = req.app.get("db");
+        const { id } = req.params;
+        await db.delete_post([id]);
+        const posts = await db.get_posts();
+        res.status(200).send(posts);
+    },
 }
