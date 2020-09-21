@@ -8,38 +8,56 @@ import './Dashboard.css'
 
 class Dashboard extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            search: '',
-            myPosts: true,
             posts: [],
+            search: "",
+            myPosts: true,
+        };
+    }
+
+    componentDidMount() {
+        this.getPosts();
+    }
+
+    getPosts = () => {
+        let { search, myPosts } = this.state;
+        let url = "/api/posts/";
+
+        if (myPosts && !search) {
+            url += "?user_posts=true&search=";
+        } else if (!myPosts && search) {
+            url += `?user_posts=false&search=${search}`;
+        } else if (myPosts && search) {
+            url += `?user_posts=true&search=${search}`;
+        } else if (!myPosts && !search) {
+            url += "?user_posts=false&search=";
         }
-    }
+        axios.get(url).then((res) => {
+            this.setState({
+                posts: res.data,
+            });
+        });
+    };
 
-    setSearchState(e) {
+    handleChange = (e) => {
         this.setState({
-            search: e.target.value
-        })
-    }
+            search: e.target.value,
+        });
+    };
 
-    setUserPostsState() {
-        const { userPosts } = this.state
-        this.setState({
-            userPosts: !userPosts
-        })
-    }
-
-    reset() {
-        let { myPosts } = this.state
-        let url = `/api/posts/${this.props.userId}`
+    reset = () => {
+        let { myPosts } = this.state;
+        let url = "/api/posts/";
         if (myPosts) {
-            url += '?mine=true'
+            url += "?user_posts=true&search=";
         }
-        axios.get(url)
-            .then(res => {
-                this.setState({ posts: res.data, loading: false, search: '' })
-            })
-    }
+        axios.get(url).then((res) => {
+            console.log(this.state);
+            this.setState({ posts: res.data, search: "" });
+        });
+    };
+
     render() {
         let posts = this.state.posts.map((el) => {
             return <Link to={`/api/posts/${el.id}`} key={el.post_id}>

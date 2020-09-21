@@ -59,36 +59,36 @@ module.exports = {
     },
 
     me: async (req, res) => {
-        const db = req.app.get("db");
-        const { user_id } = req.session;
-        const { username, profile_pic } = req.session;
-        const user = await db.me(user_id, username, profile_pic);
-        res.status(200).send(req.session.user);
+        const db = req.app.get("db")
+        const { user_id } = req.session
+        const { username, profile_pic } = req.session
+        const user = await db.me(user_id, username, profile_pic)
+        res.status(200).send(req.session.user)
     },
 
     getPosts: async (req, res) => {
-        const db = req.app.get("db");
+        const db = req.app.get("db")
 
-        const { id } = req.session.user;
-        const { search, user_posts } = req.query;
+        const { id } = req.session.user
+        const { search, user_posts } = req.query
 
-        const posts = await db.get_posts();
+        const posts = await db.get_posts()
 
         if (user_posts === "true" && search) {
-            const lowerSearch = search.toLowerCase();
+            const lowerSearch = search.toLowerCase()
             const filteredPosts = posts.filter((post) =>
                 post.title.toLowerCase().includes(lowerSearch)
-            );
-            return res.status(200).send(filteredPosts);
+            )
+            return res.status(200).send(filteredPosts)
         } else if (user_posts === "false" && !search) {
-            const filteredPosts = posts.filter((post) => post.author_id != id);
-            return res.status(200).send(filteredPosts);
+            const filteredPosts = posts.filter((post) => post.author_id != id)
+            return res.status(200).send(filteredPosts)
         } else if (user_posts === "false" && search) {
-            const lowerSearch = search.toLowerCase();
+            const lowerSearch = search.toLowerCase()
             const filteredPosts = posts.filter(
                 (post) =>
                     post.author_id != id && post.title.toLowerCase().includes(lowerSearch)
-            );
+            )
             return res.status(200).send(filteredPosts);
         } else {
             return res.status(200).send(posts);
@@ -96,29 +96,29 @@ module.exports = {
     },
 
     getPostById: async (req, res) => {
-        const db = req.app.get("db");
+        const db = req.app.get("db")
 
-        const { id } = req.params;
+        const { id } = req.params
 
-        const post = await db.get_post_by_id([id]);
+        const post = await db.get_post_by_id([id])
 
-        res.status(200).send(post);
+        res.status(200).send(post)
     },
 
     writePost: async (req, res) => {
-        const db = req.app.get("db");
-        const { id } = req.session.user;
-        const { title, img, content } = req.body;
-        await db.write_post([id, title, img, content]);
-        const posts = await db.get_posts();
-        res.status(200).send(posts);
+        const db = req.app.get("db")
+        const { id } = req.session.user
+        const { title, img, content } = req.body
+        await db.write_post([id, title, img, content])
+        const posts = await db.get_posts()
+        res.status(200).send(posts)
     },
 
     deletePost: async (req, res) => {
-        const db = req.app.get("db");
-        const { id } = req.params;
-        await db.delete_post([id]);
-        const posts = await db.get_posts();
-        res.status(200).send(posts);
+        const db = req.app.get("db")
+        const { id } = req.params
+        await db.delete_post([id])
+        const posts = await db.get_posts()
+        res.status(200).send(posts)
     },
 }
