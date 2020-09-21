@@ -10,7 +10,7 @@ class Post extends Component {
         super(props)
         this.state = {
             author: '',
-            author_pic: '',
+            profile_pic: '',
             title: '',
             img: '',
             content: '',
@@ -18,13 +18,15 @@ class Post extends Component {
     }
 
     componentDidMount() {
-        axios.get(`/api/post/${this.props.match.params.id}`)
-            .then(res => {
-                console.log(res.data)
-                this.setState(
-                    res.data[0]
-                )
-            })
+        axios.get(`/api/post/${this.props.match.params.postid}`).then((res) => {
+            this.setState({ ...res.data[0] });
+        })
+    }
+
+    delete = () => {
+        axios.delete(`/api/post/${this.props.match.params.postid}`).then((res) => {
+            this.props.history.push('/dashboard');
+        })
     }
 
     render() {
@@ -37,7 +39,7 @@ class Post extends Component {
                         <div className='post_header'>
                             <h2 className='title'>{this.state.title}</h2>
                             <div className='author_box'>
-                                <p>by {this.state.author}</p>
+                                <p>by {this.state.username}</p>
                                 <img src={this.state.profile_pic} alt='author' />
                             </div>
                         </div>
@@ -57,7 +59,11 @@ class Post extends Component {
                         <div className='load_box'>
                             <div className='load_background'></div>
                             <div className='load'></div>
+                            <div>
+                                <button onClick={this.delete}>Delete</button>
+                            </div>
                         </div>
+
                 }
             </div>
         )

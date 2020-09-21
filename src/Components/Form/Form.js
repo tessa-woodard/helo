@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -13,7 +14,14 @@ class Form extends Component {
             img: '',
             content: ''
         }
+        this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value,
+        })
     }
 
     handleSubmit() {
@@ -28,16 +36,16 @@ class Form extends Component {
                 <h2 className='title'>New Post</h2>
                 <div className='form_input_box'>
                     <p>Title:</p>
-                    <input value={this.state.title} onChange={e => this.setState({ title: e.target.value })} />
+                    <input name="title" onChange={this.handleChange} />
                 </div>
                 <div className='form_img_prev' style={{ backgroundImage: `url('${imgSrc}')` }} alt='preview' ></div>
                 <div className='form_input_box'>
                     <p>Image URL:</p>
-                    <input value={this.state.img} onChange={e => this.setState({ img: e.target.value })} />
+                    <input name="img" onChange={this.handleChange} />
                 </div>
                 <div className='form_text_box'>
                     <p>Content:</p>
-                    <textarea value={this.state.content} onChange={e => this.setState({ content: e.target.value })} />
+                    <input name="content" onChange={this.handleChange} />
                 </div>
                 <button onClick={this.handleSubmit} className='black_button form_button'>Post</button>
             </div>
