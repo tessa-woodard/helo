@@ -41,7 +41,7 @@ class Post extends Component {
                             <h2 className='title'>{this.state.title}</h2>
                             <div className='author_box'>
                                 <p>by {this.state.username}</p>
-                                <img src={'https://robohash.org/' + this.username} alt='author' />
+                                <img src={`https://robohash.org/${this.state.username}`} alt='author' />
                             </div>
                         </div>
                         <div className='post_content_box'>
@@ -56,7 +56,7 @@ class Post extends Component {
                     </div>
                 }
                 <div className='delete'>
-                    <button onClick={this.delete} className='black_button' >Delete</button>
+                    <button onClick={this.delete} className='black_button'>Delete</button>
                 </div>
 
             </div>

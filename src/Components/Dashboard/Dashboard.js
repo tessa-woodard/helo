@@ -15,7 +15,7 @@ class Dashboard extends Component {
             myPosts: true,
         }
         this.reset = this.reset.bind(this)
-        // this.getPosts = this.getPosts.bind(this)
+        this.getPosts = this.getPosts.bind(this)
     }
 
     componentDidMount() {
