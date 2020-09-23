@@ -15,7 +15,7 @@ class Dashboard extends Component {
             myPosts: true,
         }
         this.reset = this.reset.bind(this)
-
+        // this.getPosts = this.getPosts.bind(this)
     }
 
     componentDidMount() {
@@ -61,7 +61,7 @@ class Dashboard extends Component {
 
     render() {
         const mapPosts = this.state.posts.map((e) => {
-            return (<Link to={`/api/posts/${e.id}`} key={e.id}>
+            return (<Link to={`/Post/${e.id}`} key={e.id}>
                 <div className='content_box dash_post_box'>
                     <h3>{e.title}</h3>
                     <div className='author_box'>

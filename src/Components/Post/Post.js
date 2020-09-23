@@ -19,14 +19,14 @@ class Post extends Component {
     }
 
     componentDidMount() {
-        axios.get(`/api/post/${this.props.match.params.id}`).then((res) => {
+        axios.get(`/api/Post/${this.props.match.params.id}`).then((res) => {
             this.setState({ ...res.data[0] });
         })
     }
 
     delete() {
-        axios.delete(`/api/post/${this.props.match.params.id}`).then((res) => {
-            this.props.history.push('/dashboard');
+        axios.delete(`/api/Post/${this.props.match.params.id}`).then((res) => {
+            this.props.history.push('/dashboard')
         })
     }
 
@@ -50,22 +50,15 @@ class Post extends Component {
                         </div>
                     </div>
                     :
-                    !this.state.loading
-                        ?
-                        <div className='oops_box'>
-                            <h2 className='title'>Oops!</h2>
-                            <p>Looks like this post doesn't exist anymore</p>
-                        </div>
-                        :
-                        <div className='load_box'>
-                            <div className='load_background'></div>
-                            <div className='load'></div>
-                            <div>
-                                <button onClick={this.delete} className='black_button' >Delete</button>
-                            </div>
-                        </div>
-
+                    <div className='oops_box'>
+                        <h2 className='title'>Oops!</h2>
+                        <p>Looks like this post doesn't exist anymore</p>
+                    </div>
                 }
+                <div className='delete'>
+                    <button onClick={this.delete} className='black_button' >Delete</button>
+                </div>
+
             </div>
         )
     }
