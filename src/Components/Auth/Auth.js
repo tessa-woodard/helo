@@ -37,6 +37,7 @@ class Auth extends Component {
     register = () => {
         const { username, password, profile_pic } = this.state
         axios
+
             .post('/auth/register', { username, password, profile_pic })
             .then(res => {
                 this.props.loginUser(res.data)

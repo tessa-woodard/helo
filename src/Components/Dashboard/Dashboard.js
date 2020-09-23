@@ -66,7 +66,7 @@ class Dashboard extends Component {
                     <h3>{e.title}</h3>
                     <div className='author_box'>
                         <p>by {e.username}</p>
-                        <img src={e.profile_pic} alt='author' />
+                        <img src={'https://robohash.org/' + e.username} alt='author' />
                     </div>
                 </div>
             </Link>

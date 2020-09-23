@@ -10,13 +10,12 @@ const LOGIN_USER = 'LOGIN_USER'
 const LOGOUT_USER = 'LOGOUT_USER'
 const GET_USER = 'GET_USER'
 
-export function loginUser(username, id, profilePic) {
+export function loginUser(username, id) {
     return {
         type: LOGIN_USER,
         payload: {
             username: username,
             id: id,
-            profilePic: ''
         }
     }
 }
@@ -40,14 +39,14 @@ export function getUser() {
 export default function (state = initialState, action) {
     switch (action.type) {
         case LOGIN_USER:
-            const { username, id, profilePic } = action.payload.username
-            return { username, id, profilePic }
+            const { username, id, profile_pic } = action.payload.username
+            return { username, id, profile_pic }
         case LOGOUT_USER:
             return initialState
         case GET_USER + '_PENDING':
             return { ...state }
         case GET_USER + '_FULFILLED':
-            return { username, id, profilePic }
+            return { username, id, profile_pic }
         case GET_USER + '_REJECTED':
             return initialState
         default:

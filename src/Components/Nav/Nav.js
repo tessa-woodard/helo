@@ -15,7 +15,7 @@ function Nav(props) {
         return (
             <div className='Nav'>
                 <div className='nav_profile_container'>
-                    <div className='nav_profile_pic' style={{ backgroundImage: `url('https://robohash.org/${props.profilePic}')` }}></div>
+                    <div className='nav_profile_pic' style={{ backgroundImage: `url('https://robohash.org/${props.username}')` }}></div>
                     <p>{props.username}</p>
                 </div>
                 <div className='nav_links'>
