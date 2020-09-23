@@ -15,16 +15,17 @@ class Post extends Component {
             img: '',
             content: '',
         }
+        this.delete = this.delete.bind(this)
     }
 
     componentDidMount() {
-        axios.get(`/api/post/${this.props.match.params.postid}`).then((res) => {
+        axios.get(`/api/post/${this.props.match.params.id}`).then((res) => {
             this.setState({ ...res.data[0] });
         })
     }
 
     delete() {
-        axios.delete(`/api/post/${this.props.match.params.postid}`).then((res) => {
+        axios.delete(`/api/post/${this.props.match.params.id}`).then((res) => {
             this.props.history.push('/dashboard');
         })
     }
@@ -60,7 +61,7 @@ class Post extends Component {
                             <div className='load_background'></div>
                             <div className='load'></div>
                             <div>
-                                <button onClick={this.delete}>Delete</button>
+                                <button onClick={this.delete} className='black_button' >Delete</button>
                             </div>
                         </div>
 

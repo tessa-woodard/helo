@@ -91,7 +91,7 @@ module.exports = {
             )
             return res.status(200).send(filteredPosts);
         } else {
-            return res.status(200).send(posts);
+            return res.status(200).send(posts)
         }
     },
 

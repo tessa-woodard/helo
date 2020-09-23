@@ -18,11 +18,11 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        this.getPosts();
+        this.getPosts()
     }
 
     getPosts = () => {
-        let { search, myPosts } = this.state;
+        let { search, myPosts } = this.state
         let url = "/api/posts/"
 
         if (myPosts && !search) {
