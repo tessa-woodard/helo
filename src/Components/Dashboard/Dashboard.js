@@ -15,6 +15,7 @@ class Dashboard extends Component {
             myPosts: true,
         }
         this.reset = this.reset.bind(this)
+
     }
 
     componentDidMount() {

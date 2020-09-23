@@ -16,7 +16,7 @@ export function loginUser(username, id, profilePic) {
         payload: {
             username: username,
             id: id,
-            profilePic: profilePic
+            profilePic: ''
         }
     }
 }
