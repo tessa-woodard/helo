@@ -1,4 +1,4 @@
-ROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS users;
 
 create table users (
